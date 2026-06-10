@@ -1,4 +1,4 @@
-# Railway Deployment Plan — saksham-mcp-server
+# Railway Deployment Plan — mcp-server
 
 This document walks through deploying the FastAPI-based MCP server to [Railway](https://railway.app).
 

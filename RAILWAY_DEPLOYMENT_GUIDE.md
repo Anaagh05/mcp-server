@@ -18,7 +18,7 @@ To deploy via the Railway CLI, the following commands were used:
 railway login
 
 # 2. Initialize the project
-railway init -n saksham-mcp-server
+railway init -n mcp-server
 
 # 3. Deploy the code
 railway up
@@ -40,16 +40,16 @@ Get-Content -Raw token.json | railway variables set GOOGLE_TOKEN_JSON --stdin
 ## 4. Live Server
 
 The server is currently live and accessible at:
-👉 `https://saksham-mcp-server-production-1edb.up.railway.app`
+👉 `https://mcp-server-production-1edb.up.railway.app`
 
 ### Testing the Endpoints:
 
 **Health Check:**
 ```bash
-curl https://saksham-mcp-server-production-1edb.up.railway.app/
+curl https://mcp-server-production-1edb.up.railway.app/
 ```
 
 **List Tools:**
 ```bash
-curl https://saksham-mcp-server-production-1edb.up.railway.app/tools
+curl https://mcp-server-production-1edb.up.railway.app/tools
 ```
