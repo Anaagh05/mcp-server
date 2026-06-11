@@ -2,15 +2,12 @@ import logging
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from docs_tool import append_to_doc
-from gmail_tool import create_email_draft
 
 # Re-create credentials.json from environment variable for Google libraries
 if os.environ.get("GOOGLE_CREDENTIALS_JSON"):
     with open("credentials.json", "w") as f:
         f.write(os.environ.get("GOOGLE_CREDENTIALS_JSON"))
 
-logging.basicConfig(level=logging.INFO)
 # ---------------- LOGGING SETUP ---------------- #
 logging.basicConfig(
     level=logging.INFO,
@@ -30,7 +27,7 @@ class AppendDocInput(BaseModel):
 
 
 class EmailInput(BaseModel):
-    to: str 
+    to: str
     subject: str
     body: str
 
@@ -73,6 +70,19 @@ def approve(action: str, payload: dict) -> bool:
         return False
 
 
+# ---------------- HEALTH CHECK ---------------- #
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "Google MCP Server is running 🚀"
+    }
+
+
 # ---------------- MCP TOOL LIST ---------------- #
 @app.get("/tools")
 def list_tools():
@@ -92,6 +102,7 @@ def list_tools():
 @app.post("/append_to_doc")
 def run_append(data: AppendDocInput):
     try:
+        from docs_tool import append_to_doc  # lazy import — avoids startup crash
         logger.info("Received request for append_to_doc")
 
         if not approve("append_to_doc", data.dict()):
@@ -121,6 +132,7 @@ def run_append(data: AppendDocInput):
 @app.post("/create_email_draft")
 def run_email(data: EmailInput):
     try:
+        from gmail_tool import create_email_draft  # lazy import — avoids startup crash
         logger.info("Received request for create_email_draft")
 
         if not approve("create_email_draft", data.dict()):
@@ -144,17 +156,4 @@ def run_email(data: EmailInput):
         raise HTTPException(
             status_code=500,
             detail=str(e)
-        )
-
-
-# ---------------- HEALTH CHECK ---------------- #
-@app.get("/")
-def root():
-    return {
-        "message": "Google MCP Server is running 🚀"
-    }
-
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+        )
