@@ -153,3 +153,8 @@ def root():
     return {
         "message": "Google MCP Server is running 🚀"
     }
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
